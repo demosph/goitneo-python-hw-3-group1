@@ -2,6 +2,7 @@ from collections import UserDict, defaultdict
 from datetime import datetime, timedelta
 import pickle, re, os
 
+
 class Field:
     def __init__(self, value):
         self.value = value
@@ -9,8 +10,10 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
 class Name(Field):
     pass
+
 
 class Phone(Field):
     def __init__(self, value):
@@ -19,12 +22,14 @@ class Phone(Field):
             raise ValueError("Invalid phone number format. Use a 10-digit number.")
         super().__init__(value)
 
+
 class Birthday(Field):
     def __init__(self, value):
         # Валідація формату дня народження (DD.MM.YYYY)
         if not re.match(r"^\d{2}\.\d{2}.\d{4}$", value):
             raise ValueError("Invalid birthday format. Use DD.MM.YYYY.")
         super().__init__(value)
+
 
 class Record:
     def __init__(self, name):
@@ -55,6 +60,7 @@ class Record:
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
 
+
 class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
@@ -72,7 +78,9 @@ class AddressBook(UserDict):
 
         for record in self.data.values():
             if record.birthday:
-                birthday_date = datetime.strptime(record.birthday.value, "%d.%m.%Y").date()
+                birthday_date = datetime.strptime(
+                    record.birthday.value, "%d.%m.%Y"
+                ).date()
                 birthday_this_year = birthday_date.replace(year=today.year)
 
                 if birthday_this_year < today:
@@ -82,8 +90,8 @@ class AddressBook(UserDict):
 
                 if delta_days < 7:
                     day_of_week = (today + timedelta(days=delta_days)).strftime("%A")
-                    if day_of_week in ['Saturday', 'Sunday']:
-                        day_of_week = 'Monday'
+                    if day_of_week in ["Saturday", "Sunday"]:
+                        day_of_week = "Monday"
 
                     birthdays_per_week[day_of_week].append(record.name.value)
 

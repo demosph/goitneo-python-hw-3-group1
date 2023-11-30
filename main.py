@@ -1,9 +1,11 @@
 from helpers.address_book import AddressBook, Record
 
+
 def parse_input(user_input):
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
     return cmd, *args
+
 
 def input_error(func):
     def inner(*args, **kwargs):
@@ -20,6 +22,7 @@ def input_error(func):
 
     return inner
 
+
 @input_error
 def add_contact(args, book):
     if len(args) == 2:
@@ -29,7 +32,10 @@ def add_contact(args, book):
         book.add_record(record)
         return "Contact added."
     else:
-        raise ValueError("Invalid command format. Use '[name] [phone]' as command arguments.")
+        raise ValueError(
+            "Invalid command format. Use '[name] [phone]' as command arguments."
+        )
+
 
 @input_error
 def change_contact(args, book):
@@ -40,9 +46,12 @@ def change_contact(args, book):
             record.edit_phone(record.phones[0].value, new_phone)
             return "Contact updated."
         else:
-           raise KeyError(name)
+            raise KeyError(name)
     else:
-        raise ValueError("Invalid command format. Use '[name] [phone]' as command arguments.")
+        raise ValueError(
+            "Invalid command format. Use '[name] [phone]' as command arguments."
+        )
+
 
 @input_error
 def show_phone(args, book):
@@ -53,6 +62,7 @@ def show_phone(args, book):
     else:
         raise KeyError(name)
 
+
 @input_error
 def show_all(book):
     if book.data.values():
@@ -60,6 +70,7 @@ def show_all(book):
             print(record)
     else:
         print("No contacts available.")
+
 
 @input_error
 def add_birthday(args, book):
@@ -72,7 +83,10 @@ def add_birthday(args, book):
         else:
             raise KeyError(name)
     else:
-        raise ValueError("Invalid command format. Use '[name] [date]' as command arguments.")
+        raise ValueError(
+            "Invalid command format. Use '[name] [date]' as command arguments."
+        )
+
 
 @input_error
 def show_birthday(args, book):
@@ -83,12 +97,16 @@ def show_birthday(args, book):
     else:
         raise KeyError(name)
 
+
 def birthdays(book):
     birthdays = book.get_birthdays_per_week()
     if birthdays:
-        return "\n".join([f"{name}: {', '.join(birthday)}" for name, birthday in birthdays.items()])
+        return "\n".join(
+            [f"{name}: {', '.join(birthday)}" for name, birthday in birthdays.items()]
+        )
     else:
         return "No upcoming birthdays."
+
 
 def main():
     try:
@@ -122,6 +140,7 @@ def main():
                 print("Invalid command.")
     finally:
         book.save_to_file("address_book.dat")
+
 
 if __name__ == "__main__":
     main()
